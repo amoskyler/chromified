@@ -73,16 +73,20 @@ process () {
     ;;
 
     -a | --arbitrary)
-      shift # clear current args 
+      shift # clear current args
       eval "$__CHROME $@"
       return 0
     ;;
   esac
   shift
   done
+
+  # Generate output variables
   profile_id=$(resolve_user_profile_id "$user")
   [[ $incognito = true ]] && incognito_commnand="--incognito" || incognito_commnand=""
   [[ $website_url# > 0 ]] && url_command="$website_url" || url_command=""
+
+  # Generate output...
   printf "%0.s-" {1..30}
   printf "\n%s" "$user"
   printf "%s" " | "
@@ -91,7 +95,7 @@ process () {
   [[ $incognito == true ]] && printf "%s" " | incognito"
   printf '\n'
   printf "%0.s-" {1..30}
-  echo "" #cause I don't know what I'm doing 
+  echo "" #cause I don't know what I'm doing
 
   eval "${__CHROME} --profile-directory=$profile_id $incognito_commnand $website_url </dev/null &>/dev/null &"
 
